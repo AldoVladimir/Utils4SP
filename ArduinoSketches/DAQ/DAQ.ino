@@ -1,17 +1,27 @@
 char var[4];
 
 void setup() {
-   Serial.begin(115200);
-   pinMode(LED_BUILTIN, OUTPUT);
-   //Serial.print("Test 1");Serial.print('\t');Serial.print("Fecha: 2020.12.30");
-   //Serial.print('\n');Serial.print('\n');
-   //Serial.print("Temp[°C]"); Serial.print('\n');
+   //-Inicializa la comunicación serial
+   Serial.begin(115200);   
+
+   //-Envía un encabezado en las lecturas del puerto serial
+   //-Se recomienda usarlo si se hará una captura desde la terminal
+   //Serial.print("Test 1 \t");Serial.println("Fecha: 2021.10.13");
+   //Serial.print('\n');
+   //Serial.println("Tension [V]");
 }
 
 void loop() {
-  //digitalWrite(LED_BUILTIN,HIGH);
+  
+  //-Escribe la lectura del pin A0 directo al serial
+  //Serial.println(analogRead(A0));
+
+  //-Escribe una variable numérica en un "char" de ancho fijo
+  //-Este es el que debe usarse con el script de matlab  
   sprintf(var,"%03d",analogRead(A0));
   Serial.println(var);
-  //digitalWrite(LED_BUILTIN,LOW);
-  delay(1);
+  
+
+  //-Controla la frecuencia de discretizacion
+  delay(100);
 }
