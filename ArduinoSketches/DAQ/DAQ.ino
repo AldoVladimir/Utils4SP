@@ -1,4 +1,4 @@
-char var[4];
+char var[5];
 
 void setup() {
    //-Inicializa la comunicación serial
@@ -18,10 +18,10 @@ void loop() {
 
   //-Escribe una variable numérica en un "char" de ancho fijo
   //-Este es el que debe usarse con el script de matlab  
-  sprintf(var,"%03d",analogRead(A0));
+  sprintf(var,"%04d",analogRead(A0));
   Serial.println(var);
   
 
   //-Controla la frecuencia de discretizacion
-  delay(100);
+  delay(1);
 }

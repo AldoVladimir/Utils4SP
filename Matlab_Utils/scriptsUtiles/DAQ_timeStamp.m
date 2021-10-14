@@ -1,3 +1,4 @@
+%Usarse si Ts>=1 segundo
 %% Setup del puerto serie
 %Búsqueda de todos los puertos serie
 serialportlist
@@ -5,12 +6,11 @@ serialportlist
 %Asignar un objeto serial y su tasa de baudios
 s=serialport("/dev/ttyUSB0",115200)
 configureTerminator(s,"CR/LF")
-
 %% Setup de la captura
-
 %Nombre de la variable
 name="analogRead";
 figure('Name',name,'NumberTitle','off');
+
 %Crea objeto de línea animada
 h=animatedline;
 
@@ -28,14 +28,14 @@ flush(s);
 %Obtiene la fecha del sistema y la guarda como el momento inicial
 startTime=datetime('now');
 
-%while 1 %Grabado infinito  
-while t<=measureTime  %Grabado con tiempo fijo
+while 1 %Grabado infinito  
+%while t<=measureTime  %Grabado con tiempo fijo
     
    %Lectura del valor actual del sensor   
    data=readline(s);
    data=str2double(data);
    
-   %Diferencia de tiempo
+   %Tiempo transcurrido
    t=datetime('now')-startTime;   
    addpoints(h,datenum(t),data);
    
