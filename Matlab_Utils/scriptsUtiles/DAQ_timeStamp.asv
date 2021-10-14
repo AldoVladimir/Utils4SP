@@ -20,16 +20,21 @@ ax.YGrid='on';
 
 %Tiempo durante el cual se va a medir
 measureTime=seconds(10);
-t=seconds(0);
+%Longitud de la lectura
+%%numChars=5; %Número de caracters+1
+%%numReads=40; %cantidad de numeros por lectura
 
 %% Lectura y ploteo
-%Libera el buffer para puerto serial
+%Leera y ploteará mientras continueRead sea verdadero
+%t=(0:numReads-1)';
+%n=0;
+%Libera el buffer de Matlab para puerto serial
 flush(s);
 %Obtiene la fecha del sistema y la guarda como el momento inicial
 startTime=datetime('now');
 
-%while 1 %Grabado infinito  
-while t<=measureTime  %Grabado con tiempo fijo
+while 1 %Grabado infinito  
+%while t<=measureTime  %Grabado con tiempo fijo
     
    %Lectura del valor actual del sensor   
    data=readline(s);
@@ -39,9 +44,9 @@ while t<=measureTime  %Grabado con tiempo fijo
    t=datetime('now')-startTime;   
    addpoints(h,datenum(t),data);
    
-   %Ajusta los limites de x  
-   ax.XLim=datenum([t-seconds(5) t]);
-   
+   %Ajusta los limites de x
+   %ax.XLim=[t(end)-1000 t(end)];
+   %ax.XLim=datenum([t(end)-5 t(end)]);
    %Coloca un formato de fechas al eje x
    datetick('x','keeplimits');
    
@@ -52,19 +57,27 @@ while t<=measureTime  %Grabado con tiempo fijo
    endTime=datetime('now');
 end
 %% Guardado de datos
+
+
 %Obtención de los datos desde la linea animada
-[~,dataPoints] = getpoints(h);
+[timeLogs,dataPoints] = getpoints(h);
+
 
 %Vector de tiempo total
-time=startTime:(endTime-startTime)/(numel(dataPoints)-1):endTime;
+time=startTime:(endTime-startTime)/(numel(timeLogs)-1):endTime;
+Ts=seconds(endTime-startTime)/numel(timeLogs);
+fs=1/Ts;
+
+%Liberar memoria de todas las variables de lectura en tiempo real
+clear ax continueRead data endTime measureTime h t timeLogs
 
 %% Ploteo de la señal capturada
+
 figure
 plot(time,dataPoints)
+%xlabel('Tiempo')
 ylabel(name+"[Adim]")
-title(name)
-grid on
 
 %% Guardar en ASCII
-data=table(time',dataPoints','VariableNames',["DateTime" name]);
-writetable(data,"./Output/"+datestr(startTime)+"_"+name);
+data=table(time',dataPoints','VariableNames',["Fecha" name+" fs:"+fs+"Hz"]);
+writetable(data,"./Datasets/"+datestr(startTime)+"_"+name);
