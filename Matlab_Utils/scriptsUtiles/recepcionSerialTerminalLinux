@@ -1,0 +1,14 @@
+Recibir datos en terminarl Linux
+
+	++Revisar puertos seriales
+		dmesg | grep tty
+
+	++Configuración del serial
+		stty 9600 -F /dev/ttyUSB0 raw -echo
+
+	++Concatenar archivos que va leyendo e imprimirlos en la consola
+		cat /dev/ttyUSB0
+		
+	++Guardar lo impreso en la consola en un archivo de texto
+	++Funciona con el output de cualquier programa
+		cat /dev/ttyUSB0 | tee output.txt
